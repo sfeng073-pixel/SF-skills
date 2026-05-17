@@ -376,13 +376,19 @@ class SmartBIExporter {
             await this._waitForReportLoad(activePage);
         }
 
-        // 方法1: 尝试工具栏导出按钮（新界面类型）
+        // 方法1: 尝试工具栏导出（新界面类型）
         const toolbarExport = await this._tryToolbarExport(activePage);
         if (toolbarExport.success) {
             return toolbarExport;
         }
 
-        // 方法2: 尝试左侧导出菜单（旧界面类型）
+        // 方法2: 尝试左侧直接导出（新界面：左侧显示HTML/PNG/PDF/Word/Excel）
+        const leftPanelExport = await this._tryLeftPanelExport(activePage);
+        if (leftPanelExport.success) {
+            return leftPanelExport;
+        }
+
+        // 方法3: 尝试左侧导出菜单（旧界面类型）
         const menuExport = await this._tryMenuExport(activePage);
         if (menuExport.success) {
             return menuExport;
@@ -529,6 +535,90 @@ class SmartBIExporter {
             }
         } else {
             result.message = '未找到在线导出选项';
+        }
+        return result;
+    }
+
+    // 左侧直接导出方式（新界面：左侧显示HTML/PNG/PDF/Word/Excel → 点击Excel → 弹出导出设置对话框）
+    async _tryLeftPanelExport(page) {
+        const result = { success: false, filePath: null, fileName: null, message: '' };
+        
+        // 查找左侧导出面板中的Excel选项（直接在左侧显示HTML/PNG/PDF/Word/Excel的界面）
+        const excelOption = await page.evaluate(() => {
+            for (const el of document.querySelectorAll('*')) {
+                const text = (el.textContent || '').trim();
+                const rect = el.getBoundingClientRect();
+                // 在左侧区域查找Excel（x < 200 认为是左侧）
+                if (['Excel', 'EXCEL', 'excel'].includes(text) && rect.width > 20 && rect.height > 10 && rect.x < 200) {
+                    return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+                }
+            }
+            return null;
+        });
+
+        if (!excelOption) {
+            result.message = '未找到左侧Excel选项';
+            return result;
+        }
+
+        console.log('[SmartBI] 找到左侧Excel选项，点击...');
+        await page.mouse.click(excelOption.x, excelOption.y);
+        await page.waitForTimeout(2000);
+
+        // 检查是否弹出"导出设置"对话框
+        const hasDialog = await page.locator('text=导出设置').count().catch(() => 0);
+        if (hasDialog > 0) {
+            console.log('[SmartBI] 检测到导出设置对话框');
+            
+            // 查找并点击"在线导出"按钮
+            const onlineBtn = await page.evaluate(() => {
+                for (const el of document.querySelectorAll('button, span, div')) {
+                    const text = (el.textContent || '').trim();
+                    if (text === '在线导出') {
+                        const rect = el.getBoundingClientRect();
+                        if (rect.width > 30 && rect.height > 15) {
+                            return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+                        }
+                    }
+                }
+                return null;
+            });
+
+            if (onlineBtn) {
+                console.log('[SmartBI] 点击在线导出按钮');
+                const downloadPromise = page.waitForEvent('download', { timeout: 120000 }).catch(() => null);
+                await page.mouse.click(onlineBtn.x, onlineBtn.y);
+                
+                const download = await downloadPromise;
+                if (download) {
+                    const fileName = download.suggestedFilename();
+                    const filePath = path.join(this.downloadDir, fileName);
+                    await download.saveAs(filePath);
+                    result.success = true;
+                    result.fileName = fileName;
+                    result.filePath = filePath;
+                    console.log(`[SmartBI] 已保存: ${filePath}`);
+                } else {
+                    result.message = '未检测到下载事件';
+                }
+            } else {
+                result.message = '未找到在线导出按钮';
+            }
+        } else {
+            // 没有弹出对话框，可能直接下载
+            const downloadPromise = page.waitForEvent('download', { timeout: 120000 }).catch(() => null);
+            const download = await downloadPromise;
+            if (download) {
+                const fileName = download.suggestedFilename();
+                const filePath = path.join(this.downloadDir, fileName);
+                await download.saveAs(filePath);
+                result.success = true;
+                result.fileName = fileName;
+                result.filePath = filePath;
+                console.log(`[SmartBI] 已保存: ${filePath}`);
+            } else {
+                result.message = '未检测到下载事件，也未找到导出设置对话框';
+            }
         }
         return result;
     }

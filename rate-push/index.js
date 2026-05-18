@@ -19,31 +19,21 @@ function httpGet(url) {
   });
 }
 
-function extractRate(html) {
-  const patterns = [
-    /1\s*人民币[（(]?CNY[)）]?\s*[=:≈]\s*([\d.]+)\s*新台币/i,
-    /CNY[/\s]*TWD.*?([\d.]+)/i,
-    /人民币.*?([\d.]+)\s*TWD/i,
-  ];
-  for (const p of patterns) {
-    const m = html.match(p);
-    if (m) { const r = parseFloat(m[1]); if (r > 3 && r < 6) return r; }
-  }
-  return null;
-}
-
 async function fetchRate() {
   const sources = [
-    { url: 'https://waihuiqq.com/CNY_TWD.html', name: '实时汇率网' },
-    { url: 'https://finance.sina.com.cn/money/forex/hq/CNYTWD.shtml', name: '新浪财经' },
-    { url: 'https://m.cngold.org/quote/fx/jchl_CNYTWD.html', name: '金投网' },
+    { url: 'https://open.er-api.com/v6/latest/CNY', name: 'ExchangeRate-API' },
+    { url: 'https://api.exchangerate-api.com/v4/latest/CNY', name: 'ExchangeRate-API(备用)' },
   ];
   for (const s of sources) {
     try {
-      const html = await httpGet(s.url);
-      const rate = extractRate(html);
-      if (rate) return { rate, source: s.name };
-    } catch (e) { console.log(s.name + ' 失败'); }
+      const body = await httpGet(s.url);
+      const data = JSON.parse(body);
+      if (data.rates && data.rates.TWD) {
+        const rate = parseFloat(data.rates.TWD.toFixed(4));
+        console.log('汇率: 1 CNY = ' + rate + ' TWD (来源: ' + s.name + ')');
+        return { rate, source: s.name };
+      }
+    } catch (e) { console.log(s.name + ' 失败: ' + e.message); }
   }
   throw new Error('所有汇率源均失败');
 }
@@ -86,7 +76,6 @@ async function sendDingTalk(rate, source) {
 (async () => {
   try {
     const { rate, source } = await fetchRate();
-    console.log('汇率: 1 CNY = ' + rate + ' TWD');
     await sendDingTalk(rate, source);
   } catch (e) {
     console.error('失败:', e.message);

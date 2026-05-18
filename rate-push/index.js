@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 const WEBHOOK = process.env.DINGTALK_WEBHOOK;
 const SECRET = process.env.DINGTALK_SECRET;
-const AMOUNTS = [3850, 5280, 8880, 14550];
+const AMOUNTS_CNY = [3850, 5280, 8880, 14550];
 
 function getBeijingTime() {
   return new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', hour12: false }).replace(/\//g, '-');
@@ -19,39 +19,50 @@ function httpGet(url) {
   });
 }
 
-async function fetchRate() {
-  const sources = [
-    { url: 'https://open.er-api.com/v6/latest/CNY', name: 'ExchangeRate-API' },
-    { url: 'https://api.exchangerate-api.com/v4/latest/CNY', name: 'ExchangeRate-API(备用)' },
-  ];
-  for (const s of sources) {
-    try {
-      const body = await httpGet(s.url);
-      const data = JSON.parse(body);
-      if (data.rates && data.rates.TWD) {
-        const rate = parseFloat(data.rates.TWD.toFixed(4));
-        console.log('汇率: 1 CNY = ' + rate + ' TWD (来源: ' + s.name + ')');
-        return { rate, source: s.name };
-      }
-    } catch (e) { console.log(s.name + ' 失败: ' + e.message); }
+async function fetchRates() {
+  try {
+    // 获取 CNY->USD 和 USD->TWD
+    const cnyRes = await httpGet('https://open.er-api.com/v6/latest/CNY');
+    const cnyData = JSON.parse(cnyRes);
+    const cnyToUsd = cnyData.rates.USD;
+    
+    const usdRes = await httpGet('https://open.er-api.com/v6/latest/USD');
+    const usdData = JSON.parse(usdRes);
+    const usdToTwd = usdData.rates.TWD;
+    
+    console.log('汇率: 1 CNY = ' + cnyToUsd + ' USD');
+    console.log('汇率: 1 USD = ' + usdToTwd + ' TWD');
+    
+    return { 
+      cnyToUsd, 
+      usdToTwd,
+      source: 'ExchangeRate-API'
+    };
+  } catch (e) {
+    throw new Error('获取汇率失败: ' + e.message);
   }
-  throw new Error('所有汇率源均失败');
 }
 
 function generateSign(timestamp, secret) {
   return encodeURIComponent(crypto.createHmac('sha256', secret).update(timestamp + '\n' + secret).digest('base64'));
 }
 
-async function sendDingTalk(rate, source) {
+async function sendDingTalk(cnyToUsd, usdToTwd, source) {
   const timestamp = Date.now();
   const sign = generateSign(timestamp, SECRET);
   const url = WEBHOOK + '&timestamp=' + timestamp + '&sign=' + sign;
+  
   let rows = '';
-  AMOUNTS.forEach(cny => {
-    rows += '| ' + cny.toLocaleString() + ' | ' + rate + ' | ' + (cny * rate).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' |\n';
+  AMOUNTS_CNY.forEach(cny => {
+    const usd = (cny * cnyToUsd).toFixed(2);
+    const twd = (cny * cnyToUsd * usdToTwd).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    rows += '| ' + cny.toLocaleString() + ' | ' + usd + ' | ' + twd + ' |\n';
   });
-  const text = '## 💱 每日汇率播报\n\n**更新时间**：' + getBeijingTime() + '\n\n**当前汇率**：1 CNY ≈ ' + rate + ' TWD\n\n| 人民币(CNY) | 汇率 | 新台币(TWD) |\n|:-----------:|:----:|:-----------:|\n' + rows + '> 数据来源：' + source;
+  
+  const text = '## 💱 每日汇率播报\n\n**更新时间**：' + getBeijingTime() + '\n\n**汇率路径**：CNY → USD → TWD\n\n| 人民币(CNY) | 美元(USD) | 新台币(TWD) |\n|:-----------:|:---------:|:-----------:|\n' + rows + '> 💡 计算方式：人民币先兑换美元，再兑换新台币\n\n> 数据来源：' + source;
+  
   const data = JSON.stringify({ msgtype: 'markdown', markdown: { title: '每日汇率播报', text } });
+  
   for (let i = 0; i <= 3; i++) {
     try {
       const result = await new Promise((resolve, reject) => {
@@ -75,8 +86,8 @@ async function sendDingTalk(rate, source) {
 
 (async () => {
   try {
-    const { rate, source } = await fetchRate();
-    await sendDingTalk(rate, source);
+    const { cnyToUsd, usdToTwd, source } = await fetchRates();
+    await sendDingTalk(cnyToUsd, usdToTwd, source);
   } catch (e) {
     console.error('失败:', e.message);
     process.exit(1);

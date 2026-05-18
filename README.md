@@ -13,7 +13,7 @@
 | 🤖 销售助手 | vipthink-sales-bot | VIPTHINK 销售助手机器人，管理销售话术知识库 |知识库待丰富完全
 | 🔊 语音识别 | voice-polish | 语音转写文本优化，修复错别字、删除语气词 |
 | 🔄 github同步 | github-sync | GitHub 技能同步工具，一键推送本地技能到 GitHub |
-
+| 🔄 汇率推送 | rate-push | 通过github定时推送台湾汇率 |避开tare定时任务时区问题
 ## 快速安装
 
 npx skills add sfeng073-pixel/SF-skills

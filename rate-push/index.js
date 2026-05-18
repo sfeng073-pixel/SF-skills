@@ -21,7 +21,6 @@ function httpGet(url) {
 
 async function fetchRates() {
   try {
-    // 获取 CNY->USD 和 USD->TWD
     const cnyRes = await httpGet('https://open.er-api.com/v6/latest/CNY');
     const cnyData = JSON.parse(cnyRes);
     const cnyToUsd = cnyData.rates.USD;
@@ -59,7 +58,7 @@ async function sendDingTalk(cnyToUsd, usdToTwd, source) {
     rows += '| ' + cny.toLocaleString() + ' | ' + usd + ' | ' + twd + ' |\n';
   });
   
-  const text = '## 💱 每日汇率播报\n\n**更新时间**：' + getBeijingTime() + '\n\n**汇率路径**：CNY → USD → TWD\n\n| 人民币(CNY) | 美元(USD) | 新台币(TWD) |\n|:-----------:|:---------:|:-----------:|\n' + rows + '> 💡 计算方式：人民币先兑换美元，再兑换新台币\n\n> 数据来源：' + source;
+  const text = '## 💱 每日汇率播报\n\n**更新时间**：' + getBeijingTime() + '\n\n**汇率信息**：\n- 1 CNY = ' + cnyToUsd + ' USD\n- 1 USD = ' + usdToTwd + ' TWD\n\n| 人民币(CNY) | 美元(USD) | 新台币(TWD) |\n|:-----------:|:---------:|:-----------:|\n' + rows + '\n> 💡 计算方式：人民币先兑换美元，再兑换新台币\n\n> 数据来源：' + source;
   
   const data = JSON.stringify({ msgtype: 'markdown', markdown: { title: '每日汇率播报', text } });
   

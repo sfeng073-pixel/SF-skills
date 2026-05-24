@@ -1,0 +1,35 @@
+name: Daily CC Call Report
+
+on:
+  schedule:
+    # 每天 14:00、18:30、21:30 执行 (UTC 时间)
+    - cron: '0 6 * * *'    # 14:00 CST
+    - cron: '30 10 * * *'  # 18:30 CST
+    - cron: '30 13 * * *'  # 21:30 CST
+  workflow_dispatch:  # 支持手动触发
+
+jobs:
+  run-report:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Install Playwright
+      run: npx playwright install chromium
+      
+    - name: Run CC Call Report
+      run: node index.js
+      env:
+        DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
+        DINGTALK_SECRET: ${{ secrets.DINGTALK_SECRET }}

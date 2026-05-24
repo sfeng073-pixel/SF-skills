@@ -1,0 +1,19 @@
+{
+    "smartbi": {
+        "reportName": "益智CC日通时通次监控",
+        "reportAlias": "CC通时通次"
+    },
+    "dingtalk": {
+        "webhook": "YOUR_DINGTALK_WEBHOOK_URL",
+        "secret": "YOUR_DINGTALK_SECRET"
+    },
+    "schedule": {
+        "times": ["14:00", "18:30", "21:30"],
+        "timezone": "Asia/Shanghai"
+    },
+    "dataProcess": {
+        "filterBy": "台湾",
+        "sortField": "人均通时",
+        "sortOrder": "desc"
+    }
+}

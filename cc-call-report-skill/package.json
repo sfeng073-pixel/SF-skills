@@ -1,0 +1,22 @@
+{
+    "name": "cc-call-report-skill",
+    "version": "1.0.0",
+    "description": "CC通时通次数据自动播报技能 - 从SmartBI导出数据、处理汇总、推送到钉钉",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "node index.js --test"
+    },
+    "keywords": [
+        "smartbi",
+        "dingtalk",
+        "call-report",
+        "automation"
+    ],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "canvas": "^3.2.3",
+        "xlsx": "^0.18.5"
+    }
+}

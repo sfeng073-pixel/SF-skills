@@ -1,11 +1,13 @@
 {
     "smartbi": {
         "reportName": "益智CC日通时通次监控",
-        "reportAlias": "CC通时通次"
+        "reportAlias": "CC通时通次",
+        "username": "",
+        "password": ""
     },
     "dingtalk": {
-        "webhook": "YOUR_DINGTALK_WEBHOOK_URL",
-        "secret": "YOUR_DINGTALK_SECRET"
+        "webhook": "",
+        "secret": ""
     },
     "schedule": {
         "times": ["14:00", "18:30", "21:30"],

@@ -71,34 +71,43 @@ class CCCallReportSkill {
 
     /**
      * 初始化SmartBI导出器
+     * 加载顺序：内置 smartbi-export → 本地 SOLO 技能路径
+     * 账号优先从环境变量读取，兼容 GitHub Actions
      */
     async _initSmartBIExporter() {
         if (this.smartbiExporter) {
             return this.smartbiExporter;
         }
 
-        // 尝试加载 smartbi-export 技能
-        const smartbiSkillPath = '/mnt/appuserdata/skills/smartbi-export';
-        const localSmartbiPath = path.join(__dirname, 'smartbi-export');
-        
+        // 按优先级查找 smartbi-export 模块
+        const searchPaths = [
+            path.join(__dirname, 'smartbi-export'),           // 内置（GitHub Actions 使用）
+            '/mnt/appuserdata/skills/smartbi-export'          // 本地 SOLO 技能路径
+        ];
+
         let exporterPath = null;
-        if (fs.existsSync(path.join(smartbiSkillPath, 'index.js'))) {
-            exporterPath = smartbiSkillPath;
-        } else if (fs.existsSync(path.join(localSmartbiPath, 'index.js'))) {
-            exporterPath = localSmartbiPath;
+        for (const p of searchPaths) {
+            if (fs.existsSync(path.join(p, 'index.js'))) {
+                exporterPath = p;
+                break;
+            }
         }
 
         if (!exporterPath) {
-            throw new Error('未找到 smartbi-export 技能，请确保已安装');
+            throw new Error('未找到 smartbi-export 模块');
         }
 
         console.log(`[CCCallReport] 加载 SmartBI 导出器: ${exporterPath}`);
         const SmartBIExporter = require(exporterPath);
-        
+
+        // 账号配置：环境变量优先，config.json 次之
+        const smartbiConfig = this.config.smartbi || {};
         this.smartbiExporter = new SmartBIExporter({
-            downloadDir: this.workDir
+            downloadDir: this.workDir,
+            username: process.env.SMARTBI_USER || smartbiConfig.username || '',
+            password: process.env.SMARTBI_PASS || smartbiConfig.password || ''
         });
-        
+
         return this.smartbiExporter;
     }
 

@@ -1,0 +1,16 @@
+{
+  "name": "smartbi-export-skill",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "playwright": "^1.60.0",
+    "xlsx": "^0.18.5"
+  }
+}

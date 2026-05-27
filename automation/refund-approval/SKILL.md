@@ -2,6 +2,9 @@
 name: refund-approval
 version: 1.0.0
 description: 退费审批自动化系统。当用户需要执行退费审批、查看审批记录、生成退费周报、管理定时任务时使用。
+metadata:
+  status: "规划中"
+  note: "本技能为规划/文档阶段，暂无代码实现"
 ---
 
 # 退费审批自动化技能

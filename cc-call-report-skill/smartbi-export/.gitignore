@@ -1,7 +1,0 @@
-node_modules/
-*.xlsx
-*.zip
-benchmark.js
-test_fast_export.js
-.env
-.DS_Store

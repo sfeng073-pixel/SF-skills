@@ -2,6 +2,9 @@
 name: github-sync
 version: 1.0.0
 description: "GitHub 技能同步工具。当用户需要将本地技能推送到 GitHub、同步代码到仓库、更新 GitHub 上的技能时使用。触发词：推送到GitHub、同步到GitHub、更新到仓库、GitHub同步、git push等。"
+metadata:
+  status: "规划中"
+  note: "本技能为规划/文档阶段，暂无代码实现"
 ---
 
 # GitHub Sync — 技能同步到 GitHub

@@ -2,6 +2,7 @@
 .DS_Store
 .AppleDouble
 .LSOverride
+._*
 
 # Node
 node_modules/
@@ -14,7 +15,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.egg-info/
-.eggs/
 dist/
 build/
 
@@ -28,9 +28,9 @@ build/
 # Logs
 *.log
 
-# Generated data
-# 取消注释下一行以忽略实际数据文件
-# sales-data.json
+# Environment
+.env
+.env.local
 
 # OS
 Thumbs.db

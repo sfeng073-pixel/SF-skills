@@ -12,7 +12,9 @@ jobs:
   run-report:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
+    defaults:
+      run:
+        working-directory: cc-call-report-skill
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -22,7 +24,7 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Install dependencies (root)
+    - name: Install dependencies
       run: npm install
 
     - name: Install dependencies (smartbi-export)

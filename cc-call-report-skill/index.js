@@ -37,25 +37,21 @@ class CCCallReportSkill {
 
     /**
      * 加载配置文件
+     * 环境变量优先级高于配置文件（兼容 GitHub Actions）
      */
     _loadConfig(configPath) {
         const defaultConfigPath = path.join(__dirname, 'config.json');
         const finalPath = configPath || defaultConfigPath;
         
-        if (fs.existsSync(finalPath)) {
-            const content = fs.readFileSync(finalPath, 'utf8');
-            return JSON.parse(content);
-        }
-        
-        // 返回默认配置
-        return {
+        // 基础默认配置
+        const defaultConfig = {
             smartbi: {
                 reportName: '益智CC日通时通次监控',
                 reportAlias: 'CC通时通次'
             },
             dingtalk: {
-                webhook: process.env.DINGTALK_WEBHOOK || '',
-                secret: process.env.DINGTALK_SECRET || ''
+                webhook: '',
+                secret: ''
             },
             schedule: {
                 times: ['14:00', '18:30', '21:30'],
@@ -67,6 +63,31 @@ class CCCallReportSkill {
                 sortOrder: 'desc'
             }
         };
+        
+        // 读取配置文件
+        let fileConfig = {};
+        if (fs.existsSync(finalPath)) {
+            const content = fs.readFileSync(finalPath, 'utf8');
+            fileConfig = JSON.parse(content);
+        }
+        
+        // 合并配置：默认 < 配置文件 < 环境变量
+        const mergedConfig = {
+            ...defaultConfig,
+            ...fileConfig,
+            dingtalk: {
+                webhook: process.env.DINGTALK_WEBHOOK || fileConfig.dingtalk?.webhook || defaultConfig.dingtalk.webhook,
+                secret: process.env.DINGTALK_SECRET || fileConfig.dingtalk?.secret || defaultConfig.dingtalk.secret
+            },
+            smartbi: {
+                ...defaultConfig.smartbi,
+                ...fileConfig.smartbi,
+                username: process.env.SMARTBI_USER || fileConfig.smartbi?.username || '',
+                password: process.env.SMARTBI_PASS || fileConfig.smartbi?.password || ''
+            }
+        };
+        
+        return mergedConfig;
     }
 
     /**

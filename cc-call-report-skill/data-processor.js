@@ -30,10 +30,19 @@ class DataProcessor {
         const rawData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
         console.log(`[DataProcessor] 读取到 ${rawData.length} 行原始数据`);
+        
+        // 打印前10行用于调试
+        console.log(`[DataProcessor] 前10行数据预览:`);
+        for (let i = 0; i < Math.min(10, rawData.length); i++) {
+            console.log(`  行${i}: ${JSON.stringify(rawData[i])}`);
+        }
 
         // 解析小组汇总数据
         const teamSummary = this._parseTeamSummary(rawData);
         console.log(`[DataProcessor] 解析到 ${teamSummary.length} 个小组汇总`);
+        if (teamSummary.length > 0) {
+            console.log(`[DataProcessor] 小组列表: ${teamSummary.map(t => t.小组).join(', ')}`);
+        }
 
         // 解析个人明细数据
         const personalDetails = this._parsePersonalDetails(rawData);
@@ -44,8 +53,16 @@ class DataProcessor {
         let filteredPersonal = personalDetails;
         
         if (this.filterBy) {
-            filteredTeams = teamSummary.filter(item => item.小组 && item.小组.includes(this.filterBy));
-            filteredPersonal = personalDetails.filter(item => item.所属小组 && item.所属小组.includes(this.filterBy));
+            console.log(`[DataProcessor] 开始筛选关键词: "${this.filterBy}"`);
+            filteredTeams = teamSummary.filter(item => {
+                const match = item.小组 && item.小组.includes(this.filterBy);
+                console.log(`  检查小组 "${item.小组}": ${match ? '匹配' : '不匹配'}`);
+                return match;
+            });
+            filteredPersonal = personalDetails.filter(item => {
+                const match = item.所属小组 && item.所属小组.includes(this.filterBy);
+                return match;
+            });
             console.log(`[DataProcessor] 筛选"${this.filterBy}"后: ${filteredTeams.length} 个小组, ${filteredPersonal.length} 条个人明细`);
         }
 
@@ -95,8 +112,9 @@ class DataProcessor {
     _parseTeamSummary(rawData) {
         const teams = [];
         
-        for (let i = 4; i < rawData.length; i++) {
+        for (let i = 0; i < rawData.length; i++) {
             const row = rawData[i];
+            // 检查是否是小组汇总行：第2列是小组名，包含"组"，第3列没有姓名
             if (row[1] && typeof row[1] === 'string' && 
                 row[1].includes('组') && 
                 row[1] !== '小组' &&
@@ -134,7 +152,7 @@ class DataProcessor {
         const persons = [];
         let currentTeam = null;
         
-        for (let i = 4; i < rawData.length; i++) {
+        for (let i = 0; i < rawData.length; i++) {
             const row = rawData[i];
             
             // 检查是否是小组行（有小组名且有姓名）

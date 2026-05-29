@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "dept_ids": {
+    "taiwan": ["需要从钉钉CLI查询获取"],
+    "hongkong": [],
+    "australia": []
+  },
+  "defaults": {
+    "date_range": "today",
+    "min_call_duration": 30,
+    "max_downloads": 50
+  },
+  "storage": {
+    "temp_recording_dir": "/tmp/taiwan_recordings",
+    "log_dir": "~/.taiwan-recording/logs"
+  },
+  "asr": {
+    "enabled": true,
+    "model": "paraformer-v2",
+    "api_key": "YOUR_DASHSCOPE_API_KEY"
+  },
+  "feishu": {
+    "enabled": true,
+    "report_folder": "台湾销售录音报告"
+  },
+  "cli_paths": {
+    "dws": "dws",
+    "cc_workbench": "cc-workbench2"
+  }
+}

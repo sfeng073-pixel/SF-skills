@@ -1,0 +1,306 @@
+{
+  "summary": {
+    "total_gmv_target": 993730.0,
+    "total_gmv_actual": 420680.0,
+    "mtd_rate": 0.4233343060992423,
+    "order_target": 215.0,
+    "order_actual": 87.25,
+    "order_rate": 0.405814,
+    "分发转化率": 36.73,
+    "分发滚动转化率": 35.58,
+    "产能达成率": 48.01,
+    "滚动ASP": 0
+  },
+  "sales_ranking": [
+    {
+      "rank": 1,
+      "name": "杨萍",
+      "team": "台湾CC02组",
+      "gmv_target": 55464.0,
+      "gmv_actual": 39190.0,
+      "mtd_rate": 0.7065844511755373,
+      "order_target": 12.0,
+      "order_actual": 6.0,
+      "order_rate": 0.5
+    },
+    {
+      "rank": 2,
+      "name": "刘琦",
+      "team": "台湾CC02组",
+      "gmv_target": 23110.0,
+      "gmv_actual": 16170.0,
+      "mtd_rate": 0.6996971008221549,
+      "order_target": 5.0,
+      "order_actual": 4.25,
+      "order_rate": 0.85
+    },
+    {
+      "rank": 3,
+      "name": "林庚龙",
+      "team": "台湾CC02组",
+      "gmv_target": 46220.0,
+      "gmv_actual": 31900.0,
+      "mtd_rate": 0.6901774123755949,
+      "order_target": 10.0,
+      "order_actual": 8.85,
+      "order_rate": 0.885
+    },
+    {
+      "rank": 4,
+      "name": "吕秀琼",
+      "team": "台湾CC02组",
+      "gmv_target": 55464.0,
+      "gmv_actual": 37780.0,
+      "mtd_rate": 0.6811625558921102,
+      "order_target": 12.0,
+      "order_actual": 6.75,
+      "order_rate": 0.5625
+    },
+    {
+      "rank": 5,
+      "name": "林佩盈",
+      "team": "台湾CC02组",
+      "gmv_target": 60086.0,
+      "gmv_actual": 40880.0,
+      "mtd_rate": 0.6803581533135838,
+      "order_target": 13.0,
+      "order_actual": 9.35,
+      "order_rate": 0.719231
+    },
+    {
+      "rank": 6,
+      "name": "蔡郭钰",
+      "team": "台湾CC02组",
+      "gmv_target": 55464.0,
+      "gmv_actual": 32010.0,
+      "mtd_rate": 0.5771311120726959,
+      "order_target": 12.0,
+      "order_actual": 6.3,
+      "order_rate": 0.525
+    },
+    {
+      "rank": 7,
+      "name": "谢启仰",
+      "team": "台湾CC02组",
+      "gmv_target": 55464.0,
+      "gmv_actual": 30390.0,
+      "mtd_rate": 0.5479229770662051,
+      "order_target": 12.0,
+      "order_actual": 4.05,
+      "order_rate": 0.3375
+    },
+    {
+      "rank": 8,
+      "name": "吴心玲",
+      "team": "台湾CC02组",
+      "gmv_target": 36976.0,
+      "gmv_actual": 19690.0,
+      "mtd_rate": 0.5325075724794461,
+      "order_target": 8.0,
+      "order_actual": 3.8,
+      "order_rate": 0.475
+    },
+    {
+      "rank": 9,
+      "name": "吴世昌",
+      "team": "台湾CC02组",
+      "gmv_target": 46220.0,
+      "gmv_actual": 23210.0,
+      "mtd_rate": 0.5021635655560364,
+      "order_target": 10.0,
+      "order_actual": 4.5,
+      "order_rate": 0.45
+    },
+    {
+      "rank": 10,
+      "name": "李顺智",
+      "team": "台湾CC02组",
+      "gmv_target": 55464.0,
+      "gmv_actual": 25290.0,
+      "mtd_rate": 0.4559714409346603,
+      "order_target": 12.0,
+      "order_actual": 7.1,
+      "order_rate": 0.591667
+    },
+    {
+      "rank": 11,
+      "name": "张莉红",
+      "team": "台湾CC02组",
+      "gmv_target": 60086.0,
+      "gmv_actual": 22440.0,
+      "mtd_rate": 0.37346470059581266,
+      "order_target": 13.0,
+      "order_actual": 6.35,
+      "order_rate": 0.488462
+    },
+    {
+      "rank": 12,
+      "name": "朱晓凌",
+      "team": "台湾CC02组",
+      "gmv_target": 69330.0,
+      "gmv_actual": 23870.0,
+      "mtd_rate": 0.34429539881725085,
+      "order_target": 15.0,
+      "order_actual": 6.55,
+      "order_rate": 0.436667
+    },
+    {
+      "rank": 13,
+      "name": "花小红",
+      "team": "台湾CC02组",
+      "gmv_target": 55464.0,
+      "gmv_actual": 17600.0,
+      "mtd_rate": 0.31732294821866436,
+      "order_target": 12.0,
+      "order_actual": 2.0,
+      "order_rate": 0.166667
+    },
+    {
+      "rank": 14,
+      "name": "林鸿池",
+      "team": "台湾CC02组",
+      "gmv_target": 69330.0,
+      "gmv_actual": 17930.0,
+      "mtd_rate": 0.25861820279821146,
+      "order_target": 15.0,
+      "order_actual": 3.05,
+      "order_rate": 0.203334
+    },
+    {
+      "rank": 15,
+      "name": "何威",
+      "team": "台湾CC02组",
+      "gmv_target": 64708.0,
+      "gmv_actual": 13520.0,
+      "mtd_rate": 0.20893861655436732,
+      "order_target": 14.0,
+      "order_actual": 2.25,
+      "order_rate": 0.160715
+    },
+    {
+      "rank": 16,
+      "name": "张培",
+      "team": "台湾CC02组",
+      "gmv_target": 69330.0,
+      "gmv_actual": 14400.0,
+      "mtd_rate": 0.2077022933794894,
+      "order_target": 15.0,
+      "order_actual": 3.05,
+      "order_rate": 0.203334
+    },
+    {
+      "rank": 17,
+      "name": "白沧海",
+      "team": "台湾CC02组",
+      "gmv_target": 69330.0,
+      "gmv_actual": 9130.0,
+      "mtd_rate": 0.1316890235107457,
+      "order_target": 15.0,
+      "order_actual": 2.25,
+      "order_rate": 0.15
+    },
+    {
+      "rank": 18,
+      "name": "蒋加进",
+      "team": "台湾CC02组",
+      "gmv_target": 46220.0,
+      "gmv_actual": 5280.0,
+      "mtd_rate": 0.11423626135871917,
+      "order_target": 10.0,
+      "order_actual": 0.8,
+      "order_rate": 0.08
+    }
+  ],
+  "call_data": [
+    {
+      "name": "吴世昌",
+      "call_time": 43.58,
+      "call_count": 61
+    },
+    {
+      "name": "朱晓凌",
+      "call_time": 37.1,
+      "call_count": 18
+    },
+    {
+      "name": "张培",
+      "call_time": 25.72,
+      "call_count": 22
+    },
+    {
+      "name": "林佩盈",
+      "call_time": 24.9,
+      "call_count": 61
+    },
+    {
+      "name": "蒋加进",
+      "call_time": 23.93,
+      "call_count": 52
+    },
+    {
+      "name": "李顺智",
+      "call_time": 22.7,
+      "call_count": 23
+    },
+    {
+      "name": "吕秀琼",
+      "call_time": 20.47,
+      "call_count": 11
+    },
+    {
+      "name": "杨萍",
+      "call_time": 19.32,
+      "call_count": 31
+    },
+    {
+      "name": "花小红",
+      "call_time": 15.92,
+      "call_count": 32
+    },
+    {
+      "name": "谢启仰",
+      "call_time": 15.85,
+      "call_count": 10
+    },
+    {
+      "name": "刘琦",
+      "call_time": 12.43,
+      "call_count": 35
+    },
+    {
+      "name": "何威",
+      "call_time": 11.22,
+      "call_count": 17
+    },
+    {
+      "name": "蔡郭钰",
+      "call_time": 10.4,
+      "call_count": 17
+    },
+    {
+      "name": "白沧海",
+      "call_time": 10.38,
+      "call_count": 20
+    },
+    {
+      "name": "林庚龙",
+      "call_time": 9.87,
+      "call_count": 24
+    },
+    {
+      "name": "林鸿池",
+      "call_time": 8.05,
+      "call_count": 6
+    },
+    {
+      "name": "张莉红",
+      "call_time": 6.45,
+      "call_count": 26
+    },
+    {
+      "name": "吴心玲",
+      "call_time": 5.03,
+      "call_count": 14
+    }
+  ]
+}

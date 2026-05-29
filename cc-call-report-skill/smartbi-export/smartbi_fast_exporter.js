@@ -107,13 +107,18 @@ class SmartbiFastExporter {
         console.log('[SmartBI Fast] 获取报表上下文...');
         const context = await this.client.openReportContext(report.id);
 
+        // 打印原始参数信息，用于调试
+        const rawParams = JSON.parse(context.userParamInfo || '[]');
+        console.log(`[SmartBI Fast] 报表原始参数: ${JSON.stringify(rawParams, null, 2)}`);
+
         // 2. 应用参数覆盖（如果有）
         let params = null;
         if (options.params) {
             params = this.applyParamOverrides(
-                JSON.parse(context.userParamInfo || '[]'),
+                rawParams,
                 options.params
             );
+            console.log(`[SmartBI Fast] 应用参数后: ${JSON.stringify(params, null, 2)}`);
         }
 
         // 3. 导出

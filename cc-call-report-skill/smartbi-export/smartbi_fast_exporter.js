@@ -109,15 +109,43 @@ class SmartbiFastExporter {
 
         // 打印原始参数信息，用于调试
         const rawParams = JSON.parse(context.userParamInfo || '[]');
-        console.log(`[SmartBI Fast] 报表原始参数: ${JSON.stringify(rawParams, null, 2)}`);
+        const outputParams = context.outputParameters || [];
+        console.log(`[SmartBI Fast] 报表原始参数(userParamInfo): ${JSON.stringify(rawParams, null, 2)}`);
+        console.log(`[SmartBI Fast] 报表输出参数(outputParameters): ${JSON.stringify(outputParams, null, 2)}`);
 
         // 2. 应用参数覆盖（如果有）
         let params = null;
         if (options.params) {
-            params = this.applyParamOverrides(
-                rawParams,
-                options.params
-            );
+            // 合并 userParamInfo 和 outputParameters 作为基础参数
+            const allParams = [...rawParams];
+            const seenIds = new Set(rawParams.map(p => String(p.id || '')));
+            for (const param of outputParams) {
+                if (!param || typeof param !== 'object') continue;
+                const paramId = String(param.id || '');
+                if (!paramId || seenIds.has(paramId)) continue;
+                allParams.push({
+                    id: paramId,
+                    name: String(param.name || ''),
+                    alias: String(param.alias || param.name || ''),
+                    value: param.value === null ? '' : String(param.value),
+                    displayValue: param.displayValue === null ? '' : String(param.displayValue || ''),
+                });
+                seenIds.add(paramId);
+            }
+
+            // 按参数名或别名匹配覆盖
+            const overrides = options.params;
+            for (const param of allParams) {
+                const matchKey = Object.keys(overrides).find(k =>
+                    param.name === k || param.alias === k
+                );
+                if (matchKey) {
+                    param.value = overrides[matchKey];
+                    param.displayValue = overrides[matchKey];
+                }
+            }
+
+            params = allParams;
             console.log(`[SmartBI Fast] 应用参数后: ${JSON.stringify(params, null, 2)}`);
         }
 

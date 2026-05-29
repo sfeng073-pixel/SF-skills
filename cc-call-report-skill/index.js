@@ -334,8 +334,10 @@ class CCCallReportSkill {
         // 当前时间结束
         const endTime = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 
-        // SmartBI 参数格式（常见参数名）
+        // SmartBI 参数格式（常见参数名，覆盖多种可能）
         return {
+            '开始时间段': startTime,
+            '结束时间段': endTime,
             '开始时间': startTime,
             '结束时间': endTime,
             '开始日期': startTime,

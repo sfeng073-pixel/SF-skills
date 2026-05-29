@@ -15,6 +15,25 @@
 const path = require('path');
 const fs = require('fs');
 
+// 自动加载 .env 文件（不提交到 GitHub）
+const envPath = path.join(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf8');
+    envContent.split('\n').forEach(line => {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith('#')) return;
+        const eqIndex = trimmed.indexOf('=');
+        if (eqIndex > 0) {
+            const key = trimmed.slice(0, eqIndex).trim();
+            const value = trimmed.slice(eqIndex + 1).trim();
+            if (!process.env[key]) {
+                process.env[key] = value;
+            }
+        }
+    });
+    console.log('[CCCallReport] 已加载 .env 配置');
+}
+
 // 内部模块
 const DataProcessor = require('./data-processor');
 const DingTalkPusher = require('./dingtalk-pusher');

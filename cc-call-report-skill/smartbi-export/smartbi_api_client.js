@@ -149,12 +149,17 @@ class SmartbiApiClient {
      * 登录
      */
     async login(username, password) {
+        console.log(`[SmartBI API] 登录用户: ${username}`);
         await this.request('index.jsp?time=' + Date.now());
         
         const payload = await this.rmi('UserService', 'clickLogin', [username, password]);
+        console.log(`[SmartBI API] 登录响应: ${JSON.stringify(payload)}`);
+        
         if (payload.result !== true) {
-            throw new Error('SmartBI login failed');
+            const errorMsg = payload.errorMessage || payload.message || JSON.stringify(payload);
+            throw new Error(`SmartBI login failed: ${errorMsg}`);
         }
+        console.log('[SmartBI API] 登录成功');
         return true;
     }
 

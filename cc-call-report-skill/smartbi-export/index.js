@@ -3,7 +3,6 @@
  * 基于 RMI API 的高速导出，速度提升 5-10x
  * 支持124+报表的模糊匹配，兼容多种报表界面类型
  */
-const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
 const { execSync } = require('child_process');
@@ -261,6 +260,7 @@ class SmartBIExporter {
         for (let attempt = 1; attempt <= this.maxRetries + 1; attempt++) {
             if (attempt > 1) console.log(`[SmartBI] 第 ${attempt} 次重试...`);
             try {
+                const { chromium } = require('playwright');
                 const browser = await chromium.launch({ headless: this.headless, args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'] });
                 const context = await browser.newContext({ acceptDownloads: true, viewport: this.viewport });
                 const page = await context.newPage();

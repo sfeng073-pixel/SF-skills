@@ -38,3 +38,4 @@ jobs:
         SMARTBI_PASS: ${{ secrets.SMARTBI_PASS }}
         DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
         DINGTALK_SECRET: ${{ secrets.DINGTALK_SECRET }}
+        TZ: Asia/Shanghai

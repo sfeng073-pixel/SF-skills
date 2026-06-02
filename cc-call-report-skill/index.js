@@ -319,20 +319,27 @@ class CCCallReportSkill {
      * 构建日期参数（查询当天数据）
      * SmartBI 报表通常有"开始时间"和"结束时间"参数
      * 格式：YYYY-MM-DD HH:mm:ss
+     * 注意：使用北京时间（Asia/Shanghai）
      */
     _buildDateParams() {
+        // 获取北京时间
         const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const hour = String(now.getHours()).padStart(2, '0');
-        const minute = String(now.getMinutes()).padStart(2, '0');
-        const second = String(now.getSeconds()).padStart(2, '0');
+        const beijingTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Shanghai' }));
+
+        const year = beijingTime.getFullYear();
+        const month = String(beijingTime.getMonth() + 1).padStart(2, '0');
+        const day = String(beijingTime.getDate()).padStart(2, '0');
+        const hour = String(beijingTime.getHours()).padStart(2, '0');
+        const minute = String(beijingTime.getMinutes()).padStart(2, '0');
+        const second = String(beijingTime.getSeconds()).padStart(2, '0');
 
         // 当天 00:00:00 开始
         const startTime = `${year}-${month}-${day} 00:00:00`;
         // 当前时间结束
         const endTime = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+
+        console.log(`[CCCallReport] 北京时间: ${year}-${month}-${day} ${hour}:${minute}:${second}`);
+        console.log(`[CCCallReport] 查询范围: ${startTime} ~ ${endTime}`);
 
         // SmartBI 参数格式（常见参数名，覆盖多种可能）
         return {

@@ -32,7 +32,10 @@ jobs:
       run: npm install
 
     - name: Run CC Call Report
-      run: node index.js
+      run: |
+        sudo timedatectl set-timezone Asia/Shanghai
+        export TZ=Asia/Shanghai
+        node index.js
       env:
         SMARTBI_USER: ${{ secrets.SMARTBI_USER }}
         SMARTBI_PASS: ${{ secrets.SMARTBI_PASS }}

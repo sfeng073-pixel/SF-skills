@@ -1,0 +1,11 @@
+# 核心依赖（必须安装）
+requests>=2.28.0
+openpyxl>=3.0.0
+
+# 可选：自动Cookie获取（推荐至少安装一个）
+# 方案1：从已登录的浏览器自动读取Cookie
+browser_cookie3>=0.19.0
+
+# 方案2：自动打开浏览器窗口获取Cookie
+# 安装命令：pip install playwright && playwright install chromium
+playwright>=1.40.0

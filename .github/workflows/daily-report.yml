@@ -1,12 +1,13 @@
 name: CC通时通次播报
 
 on:
-  schedule:
-    # 每天3次播报（北京时间 = UTC+8）
-    - cron: '0 6 * * *'      # 14:00 北京时间
-    - cron: '30 10 * * *'    # 18:30 北京时间
-    - cron: '30 13 * * *'    # 21:30 北京时间
-  workflow_dispatch:         # 支持手动触发
+  # 定时播报已取消，如需重新启用请取消下面 schedule 的注释
+  # schedule:
+  #   # 每天3次播报（北京时间 = UTC+8）
+  #   - cron: '0 6 * * *'      # 14:00 北京时间
+  #   - cron: '30 10 * * *'    # 18:30 北京时间
+  #   - cron: '30 13 * * *'    # 21:30 北京时间
+  workflow_dispatch:         # 仅支持手动触发
 
 jobs:
   run-report:

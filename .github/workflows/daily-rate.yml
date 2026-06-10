@@ -1,8 +1,9 @@
 name: 每日汇率推送
 
 on:
-  schedule:
-    - cron: '0 3 * * *'
+  # 定时推送已取消，如需重新启用请取消下面 schedule 的注释
+  # schedule:
+  #   - cron: '0 3 * * *'
   workflow_dispatch:
 
 jobs:

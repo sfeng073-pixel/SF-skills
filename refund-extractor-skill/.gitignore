@@ -1,0 +1,18 @@
+# Cookie缓存（包含登录凭证，勿提交）
+.lanling_cookies.json
+
+# Python缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# 输出文件
+output/
+
+# IDE
+.vscode/
+.idea/
+
+# 环境变量配置（本地凭证）
+.env
+.env.local

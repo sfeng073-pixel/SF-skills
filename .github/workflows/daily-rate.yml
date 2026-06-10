@@ -1,23 +1,92 @@
-name: 每日汇率推送
+name: 每日台币价格参考图
 
 on:
-  # 定时推送已取消，如需重新启用请取消下面 schedule 的注释
-  # schedule:
-  #   - cron: '0 3 * * *'
+  schedule:
+    - cron: "30 12 * * *"
+      timezone: "Asia/Shanghai"
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: rate-push-pages
+  cancel-in-progress: false
+
 jobs:
-  push-rate:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+    defaults:
+      run:
+        working-directory: rate-push
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: rate-push/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run tests
+        run: npm test
+
+      - name: Generate rate card
+        run: npm run generate
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: rate-push/dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  notify:
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: rate-push
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
-      - name: 执行推送
-        run: node rate-push/index.js
+          node-version: 22
+          cache: npm
+          cache-dependency-path: rate-push/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Send DingTalk message
         env:
           DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
           DINGTALK_SECRET: ${{ secrets.DINGTALK_SECRET }}
-          TZ: Asia/Shanghai
+          CARD_PAGE_URL: ${{ needs.build.outputs.page_url }}
+          CARD_IMAGE_URL: ${{ needs.build.outputs.page_url }}taiwan-course-rate.png
+        run: npm run send

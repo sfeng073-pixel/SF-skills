@@ -1,35 +1,40 @@
 ---
 name: rate-push
-version: 1.0.0
-description: "每日汇率推送 - 人民币兑新台币定时推送到钉钉。每天北京时间11点查询汇率，推送到钉钉群。触发词：汇率推送、每日汇率、人民币台币汇率。"
+version: 2.0.0
+description: "台湾地区课程台币价格参考图自动播报。每天北京时间 12:30 获取汇率，按人民币→美元→新台币计算四档课包价格，生成美化图片并推送到钉钉群。"
 metadata:
   requires:
     bins: ["node"]
 ---
 
-# 每日汇率推送技能 v1.0
+# 台湾课程台币价格参考图
 
-> 每天北京时间11点自动查询人民币兑新台币汇率，推送到钉钉群。
+每天北京时间 12:30 自动生成台湾地区课程价格参考图，并通过钉钉机器人发送到群里。
 
-## 触发条件
+## 价格档位
 
-- 用户提到"汇率推送"、"每日汇率"、"人民币台币汇率"
-- 用户提到"汇率"、"换汇"、"汇价"
+- 3850
+- 5280
+- 8880
+- 14550
 
-## 功能特性
+## 计算方式
 
-- 多汇率源自动切换
-- 推送时间窗口保护
-- 失败自动重试
-- 支持钉钉群机器人 Webhook
+1. 从 ExchangeRate-API 获取 USD/CNY 与 USD/TWD。
+2. 人民币价格先除以 USD/CNY，得到美元价格。
+3. 美元价格再乘以 USD/TWD，得到新台币价格。
+4. 新台币金额四舍五入到 NT$10。
 
-## 使用方法
+## GitHub Actions
 
-```bash
-node index.js
-```
+工作流文件：`.github/workflows/daily-rate.yml`
 
-## 依赖
+- 定时：北京时间每天 12:30
+- 手动：支持 `workflow_dispatch`
+- 输出：GitHub Pages 图片 `taiwan-course-rate.png`
+- 推送：钉钉机器人 markdown 图片消息
 
-- Node.js
-- 钉钉群机器人 Webhook 地址
+## 必需 Secrets
+
+- `DINGTALK_WEBHOOK`
+- `DINGTALK_SECRET`

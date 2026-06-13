@@ -2,11 +2,13 @@ name: 每日台币价格参考图
 
 on:
   schedule:
-    # GitHub scheduled workflows use UTC. 04:30 UTC = 12:30 Beijing/Taipei time.
-    - cron: "30 4 * * *"
+    # GitHub scheduled workflows can drift, so we retry inside the 12:30 hour.
+    # 04:30, 04:40, 04:50 UTC = 12:30, 12:40, 12:50 Beijing/Taipei time.
+    - cron: "30,40,50 4 * * *"
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
@@ -16,7 +18,70 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.decide.outputs.should_run }}
+      reason: ${{ steps.decide.outputs.reason }}
+    steps:
+      - name: Decide whether this run may send
+        id: decide
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
+          EVENT_NAME: ${{ github.event_name }}
+          REPOSITORY: ${{ github.repository }}
+          WORKFLOW_FILE: daily-rate.yml
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "reason=manual dispatch" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          bj_time="$(TZ=Asia/Shanghai date '+%H:%M')"
+          if [[ "$bj_time" < "12:30" || "$bj_time" > "12:59" ]]; then
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "reason=outside Beijing 12:30-12:59 window ($bj_time)" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          runs_json="$(gh run list --repo "$REPOSITORY" --workflow "$WORKFLOW_FILE" --event schedule --limit 20 --json databaseId,createdAt,conclusion,status)"
+          decision="$(RUNS_JSON="$runs_json" CURRENT_RUN_ID="$CURRENT_RUN_ID" node - <<'NODE'
+          const runs = JSON.parse(process.env.RUNS_JSON || "[]");
+          const currentRunId = Number(process.env.CURRENT_RUN_ID);
+          const now = new Date();
+          const nowBeijing = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "Asia/Shanghai",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+          }).format(now);
+          const alreadySent = runs.some((run) => {
+            if (Number(run.databaseId) === currentRunId) return false;
+            if (run.status !== "completed" || run.conclusion !== "success") return false;
+            const runDay = new Intl.DateTimeFormat("en-CA", {
+              timeZone: "Asia/Shanghai",
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit"
+            }).format(new Date(run.createdAt));
+            return runDay === nowBeijing;
+          });
+          if (alreadySent) {
+            process.stdout.write("false|already sent today");
+          } else {
+            process.stdout.write("true|within send window");
+          }
+          NODE
+          )"
+
+          echo "should_run=${decision%%|*}" >> "$GITHUB_OUTPUT"
+          echo "reason=${decision#*|}" >> "$GITHUB_OUTPUT"
+
   build:
+    needs: gate
+    if: needs.gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:
@@ -63,7 +128,10 @@ jobs:
         uses: actions/deploy-pages@v4
 
   notify:
-    needs: build
+    needs:
+      - gate
+      - build
+    if: needs.gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:

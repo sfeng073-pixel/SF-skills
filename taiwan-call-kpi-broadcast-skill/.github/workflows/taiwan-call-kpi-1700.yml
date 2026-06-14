@@ -1,0 +1,16 @@
+name: Taiwan Call KPI 1700
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Taiwan call KPI 17:00
+        run: |
+          python3 -m pip install -r requirements.txt
+          node scripts/run-taiwan-call-kpi-slot.js --slot 1700

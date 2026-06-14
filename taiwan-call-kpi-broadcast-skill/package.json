@@ -1,0 +1,25 @@
+{
+  "name": "taiwan-call-kpi-broadcast-skill",
+  "version": "1.0.0",
+  "description": "台湾CC02组 15:00 / 17:00 / 21:30 通时通次自动播报技能",
+  "type": "module",
+  "private": false,
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "slot:1500": "node scripts/run-taiwan-call-kpi-slot.js --slot 1500 --dry-run",
+    "slot:1700": "node scripts/run-taiwan-call-kpi-slot.js --slot 1700 --dry-run",
+    "slot:2130": "node scripts/run-taiwan-call-kpi-slot.js --slot 2130 --dry-run"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "keywords": [
+    "taiwan",
+    "sales",
+    "smartbi",
+    "dingtalk",
+    "broadcast",
+    "call-duration"
+  ],
+  "license": "MIT"
+}

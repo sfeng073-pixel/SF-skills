@@ -1,0 +1,17 @@
+{
+  "name": "taiwan-call-kpi-broadcast-skill",
+  "display_name": "台湾通时通次播报专项技能",
+  "type": "skill",
+  "status": "usable",
+  "scope": [
+    "台湾CC02组",
+    "15:00通时通次播报",
+    "17:00通时通次播报",
+    "21:30通时通次播报"
+  ],
+  "entry_file": "scripts/run-taiwan-call-kpi-slot.js",
+  "timezone": "Asia/Shanghai",
+  "data_source": "SmartBI: 益智CC日通时通次监控",
+  "github_ready": true,
+  "sensitive_assets_excluded": true
+}

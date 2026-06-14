@@ -1,0 +1,221 @@
+{
+  "run_at": "2026-06-12T15:00:00+08:00",
+  "module": "call_duration",
+  "time_slot": "1500",
+  "team_scope": {
+    "team": "台湾",
+    "group": "台湾CC02组"
+  },
+  "source_files": [
+    "runtime/taiwan-call-kpi/private/live-call-duration-2026-06-12-1500.xlsx"
+  ],
+  "normalized_rows": [
+    {
+      "group": "台湾CC02组",
+      "sales": "林庚龙",
+      "durationTarget": 60,
+      "duration": 65.15,
+      "durationRate": 1.0858,
+      "callCountTarget": 100,
+      "callCount": 29,
+      "callCountRate": 0.29
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "杨萍",
+      "durationTarget": 60,
+      "duration": 45.28,
+      "durationRate": 0.7547,
+      "callCountTarget": 100,
+      "callCount": 45,
+      "callCountRate": 0.45
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "吕秀琼",
+      "durationTarget": 60,
+      "duration": 40.65,
+      "durationRate": 0.6775,
+      "callCountTarget": 100,
+      "callCount": 24,
+      "callCountRate": 0.24
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "林佩盈",
+      "durationTarget": 60,
+      "duration": 33.02,
+      "durationRate": 0.5503,
+      "callCountTarget": 100,
+      "callCount": 40,
+      "callCountRate": 0.4
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "蒋加进",
+      "durationTarget": 60,
+      "duration": 27.65,
+      "durationRate": 0.4608,
+      "callCountTarget": 100,
+      "callCount": 40,
+      "callCountRate": 0.4
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "张莉红",
+      "durationTarget": 60,
+      "duration": 22.57,
+      "durationRate": 0.3762,
+      "callCountTarget": 100,
+      "callCount": 6,
+      "callCountRate": 0.06
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "吴心玲",
+      "durationTarget": 60,
+      "duration": 20.93,
+      "durationRate": 0.3488,
+      "callCountTarget": 100,
+      "callCount": 20,
+      "callCountRate": 0.2
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "吴世昌",
+      "durationTarget": 60,
+      "duration": 18.25,
+      "durationRate": 0.3042,
+      "callCountTarget": 100,
+      "callCount": 23,
+      "callCountRate": 0.23
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "白沧海",
+      "durationTarget": 60,
+      "duration": 17.82,
+      "durationRate": 0.297,
+      "callCountTarget": 100,
+      "callCount": 29,
+      "callCountRate": 0.29
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "花小红",
+      "durationTarget": 60,
+      "duration": 14.1,
+      "durationRate": 0.235,
+      "callCountTarget": 100,
+      "callCount": 27,
+      "callCountRate": 0.27
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "黄晓倩",
+      "durationTarget": 60,
+      "duration": 12.4,
+      "durationRate": 0.2067,
+      "callCountTarget": 100,
+      "callCount": 34,
+      "callCountRate": 0.34
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "林鸿池",
+      "durationTarget": 60,
+      "duration": 11.03,
+      "durationRate": 0.1838,
+      "callCountTarget": 100,
+      "callCount": 17,
+      "callCountRate": 0.17
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "刘琦",
+      "durationTarget": 60,
+      "duration": 10.13,
+      "durationRate": 0.1688,
+      "callCountTarget": 100,
+      "callCount": 18,
+      "callCountRate": 0.18
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "温伟杰",
+      "durationTarget": 60,
+      "duration": 7.35,
+      "durationRate": 0.1225,
+      "callCountTarget": 100,
+      "callCount": 35,
+      "callCountRate": 0.35
+    },
+    {
+      "group": "台湾CC02组",
+      "sales": "谢启仰",
+      "durationTarget": 60,
+      "duration": 1.4,
+      "durationRate": 0.0233,
+      "callCountTarget": 100,
+      "callCount": 5,
+      "callCountRate": 0.05
+    }
+  ],
+  "summary_metrics": {
+    "salesCount": 15,
+    "durationTailSales": [
+      "谢启仰",
+      "温伟杰",
+      "刘琦"
+    ],
+    "callCountTailSales": [
+      "谢启仰",
+      "张莉红",
+      "林鸿池"
+    ]
+  },
+  "exception_candidates": {
+    "durationTail": [
+      {
+        "group": "台湾CC02组",
+        "sales": "谢启仰",
+        "duration": 1.4,
+        "callCount": 5
+      },
+      {
+        "group": "台湾CC02组",
+        "sales": "温伟杰",
+        "duration": 7.35,
+        "callCount": 35
+      },
+      {
+        "group": "台湾CC02组",
+        "sales": "刘琦",
+        "duration": 10.13,
+        "callCount": 18
+      }
+    ],
+    "callCountTail": [
+      {
+        "group": "台湾CC02组",
+        "sales": "谢启仰",
+        "duration": 1.4,
+        "callCount": 5
+      },
+      {
+        "group": "台湾CC02组",
+        "sales": "张莉红",
+        "duration": 22.57,
+        "callCount": 6
+      },
+      {
+        "group": "台湾CC02组",
+        "sales": "林鸿池",
+        "duration": 11.03,
+        "callCount": 17
+      }
+    ]
+  },
+  "broadcast_ready": true,
+  "warnings": []
+}

@@ -1,0 +1,14 @@
+.DS_Store
+.env
+node_modules/
+runtime/
+runtime-test/
+coverage/
+*.pyc
+__pycache__/
+*.xlsx
+*.xls
+*.png
+*.jpg
+*.jpeg
+*.log
